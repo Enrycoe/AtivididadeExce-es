@@ -40,9 +40,19 @@ public class Reservation {
 		return meses;
 	}
 	
-	public void updadateDates(LocalDate checkIn, LocalDate checkOut) {
+	public String updadateDates(LocalDate checkIn, LocalDate checkOut) {
+		LocalDate now = LocalDate.now();
+		if(checkIn.isBefore(now) || checkOut.isBefore(now)) {
+			return "Error in reservation: Reservation for updates must be future dates";
+		}
+		
+		if(checkIn.isAfter(checkOut)) { 
+			return "Error in reservation: Check-out date must be after check-in date";
+		}
+		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
 	
 	@Override
