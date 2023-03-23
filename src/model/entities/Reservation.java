@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import model.exceptions.DoaminException;
+
 
 public class Reservation {
 
@@ -13,7 +15,11 @@ public class Reservation {
 	private LocalDate checkIn;
 	private LocalDate checkOut;
 	
-	public Reservation(Integer roomNumber, LocalDate checkIn, LocalDate checkOut) {
+	public Reservation(Integer roomNumber, LocalDate checkIn, LocalDate checkOut) throws DoaminException {
+		if(checkIn.isAfter(checkOut)) { 
+			throw new DoaminException("Error in reservation: Check-out date must be after check-in date");
+		}
+		
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -40,19 +46,19 @@ public class Reservation {
 		return meses;
 	}
 	
-	public String updadateDates(LocalDate checkIn, LocalDate checkOut) {
+	public void updadateDates(LocalDate checkIn, LocalDate checkOut) throws DoaminException {
 		LocalDate now = LocalDate.now();
 		if(checkIn.isBefore(now) || checkOut.isBefore(now)) {
-			return "Error in reservation: Reservation for updates must be future dates";
+			throw new DoaminException("Error in reservation: Reservation for updates must be future dates");
 		}
 		
 		if(checkIn.isAfter(checkOut)) { 
-			return "Error in reservation: Check-out date must be after check-in date";
+			throw new DoaminException("Error in reservation: Check-out date must be after check-in date");
 		}
 		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
+
 	}
 	
 	@Override
